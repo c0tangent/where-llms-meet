@@ -40,7 +40,7 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v2
         with:
-          files: 'dist/where-llms-meeet-*'
+          files: 'dist/where-llms-meet-*'
           draft: false
           prerelease: true
           generate_release_notes: true
