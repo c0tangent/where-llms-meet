@@ -1,5 +1,16 @@
 # Quick Start
 
+## Before we Start
+
+You may want to run the app as administrator.
+
+For some reason, the screenshot to OCR functionality may not work properly after the first screenshot.
+This results in the app only OCR'ing the first screenshot taken.
+
+I am not too sure of the cause, I suspect the fact that Where Winds Meet sometimes runs as administrator, and that causes the app to not be able to see the game properly.
+
+You can still try running the app without administrator, it has worked sometimes for me.
+
 ## Getting the LLM ready
 
 1. Open the app and press the gear icon on the top right corner
