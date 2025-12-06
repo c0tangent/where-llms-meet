@@ -160,6 +160,11 @@ function createWindow(): void {
   }
 }
 
+// fixes for GH actions
+app.commandLine.appendSwitch('disable-software-rasterizer')
+app.commandLine.appendSwitch('enable-gpu-rasterization')
+app.commandLine.appendSwitch('use-angle', 'd3d11')
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
