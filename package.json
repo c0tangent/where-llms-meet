@@ -1,0 +1,68 @@
+{
+  "name": "where-llms-meet",
+  "version": "0.1.0",
+  "main": "./out/main/index.js",
+  "type": "module",
+  "author": "me",
+  "description": "LLM powered AI NPC solver",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint --cache .",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "vue-tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "pnpm run typecheck:node && pnpm run typecheck:web",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "pnpm run typecheck && electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "pnpm run build && electron-builder --dir",
+    "build:win": "pnpm run build && electron-builder --win",
+    "build:mac": "pnpm run build && electron-builder --mac",
+    "build:linux": "pnpm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@gutenye/ocr-node": "^1.4.8",
+    "@nuxt/ui": "^4.2.1",
+    "@unhead/vue": "^2.0.19",
+    "electron-store": "^11.0.2",
+    "electron-unhandled": "^5.0.0",
+    "mitt": "^3.0.1",
+    "openai": "^6.9.1",
+    "valibot": "^1.2.0",
+    "vue": "^3.5.21",
+    "vue-i18n": "^11.2.2",
+    "vue-router": "^4.6.3",
+    "win32-api": "^26.1.2",
+    "win32-def": "^26.1.2"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "3.0.0",
+    "@electron-toolkit/eslint-config-ts": "^3.1.0",
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "electron": "^38.1.2",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^4.0.1",
+    "eslint": "^9.36.0",
+    "eslint-plugin-vue": "^10.4.0",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6",
+    "vue-eslint-parser": "^10.2.0",
+    "vue-tsc": "^3.0.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild",
+      "koffi",
+      "onnxruntime-node",
+      "sharp",
+      "vue-demi"
+    ]
+  }
+}

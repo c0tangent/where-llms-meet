@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Where LLMs Meet</title>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- putting * for connect-src for now since I think should be better to allow freedom to choose LLM provider -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: ; connect-src 'self' https://api.iconify.design https://openrouter.ai http://localhost *"
+    />
+  </head>
+
+  <body>
+    <div id="app" class="isolate"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
