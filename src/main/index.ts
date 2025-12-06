@@ -41,11 +41,11 @@ const logger = (msg: string): void => {
 }
 
 // yeah I know I didnt sanitize this but whatever
-const cropWindow: Rectangle =
+const cropWindow = (): Rectangle =>
   (store.get('cropWindow') as Rectangle) ??
   ({ x: 100, y: 100, height: 200, width: 200 } as Rectangle)
 
-const cropArea: Rectangle =
+const cropArea = (): Rectangle =>
   (store.get('cropArea') as Rectangle) ?? ({ x: 100, y: 100, height: 200, width: 200 } as Rectangle)
 
 const sendToAll = (channel, msg): void => {
@@ -75,16 +75,16 @@ ipcMain.on('unsubscribe-store', async (_event, key) => {
 let childWindow: BrowserWindow
 let mainWindow: BrowserWindow
 
-function createCropWindow(): void {
+function createCropWindow(cropWindow_: Rectangle): void {
   childWindow = new BrowserWindow({
     parent: mainWindow,
     resizable: true,
     frame: false,
     transparent: false, //impossible to make transparent AND resizable :(
-    width: cropWindow.width,
-    height: cropWindow.height,
-    x: cropWindow.x,
-    y: cropWindow.y,
+    width: cropWindow_.width,
+    height: cropWindow_.height,
+    x: cropWindow_.x,
+    y: cropWindow_.y,
     alwaysOnTop: true
   })
 
@@ -92,23 +92,23 @@ function createCropWindow(): void {
     store.set('cropWindow', childWindow.getBounds())
   })
 
-  childWindow.loadFile(join(__dirname, '../renderer/crop.html'))
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    childWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/crop.html')
+  } else {
+    childWindow.loadFile(join(__dirname, '../renderer/crop.html'))
+  }
 }
 
 ipcMain.on('open-crop', () => {
   try {
     childWindow.show()
   } catch {
-    createCropWindow()
+    createCropWindow(cropWindow())
   }
 })
 
 ipcMain.on('get-crop', () => {
   const crop = relativePosition(childWindow.getBounds(), getWWM())
-  cropArea.x = crop.x
-  cropArea.y = crop.y
-  cropArea.width = crop.width
-  cropArea.height = crop.height
   store.set('cropArea', crop)
 })
 
@@ -120,7 +120,7 @@ ipcMain.on('read-chat', async (): Promise<void> => {
   const tmpImg = join(dataPath, 'tmp.png')
   unlink(tmpImg, () => {})
   logger('logScreenshot')
-  await screenshot(cropArea, tmpImg)
+  await screenshot(cropArea(), tmpImg)
   logger('logOcr')
   const result = await ocr(paddleOCR, tmpImg)
   const chatLog = result.map((s) => s.text.trim()).join(' ') as string
