@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, reactive } from 'vue'
+import { computed, nextTick, ref, reactive } from 'vue'
 import { getSettings } from '../settings'
 import emitter from '../events'
 import OpenAI from 'openai'
@@ -47,11 +47,16 @@ const gptClient = new OpenAI({
 })
 
 const chat = async (message: string): Promise<void> => {
+  const chatMessages = document.querySelector('#chat-messages>div')
   messages.value.push({
     role: 'user',
     content: message
   })
   log('logChat')
+  if (chatMessages) {
+    await nextTick()
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  }
   const response = await gptClient.chat.completions.create({
     model: settings.gpt[0],
     messages: messages.value
@@ -59,6 +64,10 @@ const chat = async (message: string): Promise<void> => {
   messages.value.push(response.choices[0].message as Message)
   clipboardCopy(response.choices[0].message.content ?? '')
   log('logAutoclipboard')
+  if (chatMessages) {
+    await nextTick()
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  }
 }
 
 const newVariant = ref('solid')
@@ -107,6 +116,7 @@ const newClick = (): void => {
 
 <template>
   <UChatPalette
+    id="chat-messages"
     :ui="{
       root: 'h-full',
       content: 'max-h-[calc(100vh-var(--ui-header-height)-6rem)] w-full max-w-(--ui-container)',
@@ -137,7 +147,6 @@ const newClick = (): void => {
           }
         ]
       }"
-      should-auto-scroll
       :messages="messagesUI.splice(1)"
     />
     <template #prompt>
